@@ -12,7 +12,8 @@
                             <h4>{{ $category->name }}</h4>
                         </div>
                         <div class="card-body p-0">
-                            <img src="{{asset('category__'.$category->id.'.jpg')}}" width="100%" alt="" class="img-fluid">
+                            <img src="{{asset('category__'.$category->id.'.jpg')}}" width="100%" alt=""
+                                 class="img-fluid">
                             {{--                            <img src="{{asset('category_'.$category->id.'.jpg')}}" width="100%" alt="" class="img-fluid">--}}
                         </div>
                         <div class="card-footer">
@@ -37,9 +38,42 @@
                             <img src="{{asset('product__'.$product->id.'.jpg')}}" width="100%" alt="" class="img-fluid">
                             {{--                            <img src="{{asset('product_'.$product->id.'.jpg')}}" width="100%" alt="" class="img-fluid">--}}
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-flex justify-content-between">
                             <a href="{{ route('catalog.product', ['slug' => $product->slug]) }}"
                                class="btn btn-dark">Перейти к товару</a>
+                            @if(isset($_COOKIE['favorite_id']))
+                                @if(in_array($product->id,explode(',',$_COOKIE['favorite_id'])))
+                                    <form action='{{route('favorite.delete',['id' => $product->id])}}'
+                                          method="post" class="d-flex">
+                                        @csrf
+
+                                        <button type="submit" class="btn btn-success">
+                                            Удалить из избранного
+                                        </button>
+                                    </form>
+
+                                @else
+
+                                    <form action='{{route('favorite.add',['id' => $product->id])}}'
+                                          method="post" class="d-flex">
+                                        @csrf
+
+                                        <button type="submit" class="btn btn-success">
+                                            Добавить в избранное
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                <form action='{{route('favorite.add',['id' => $product->id])}}'
+                                      method="post" class="d-flex">
+                                    @csrf
+
+                                    <button type="submit" class="btn btn-success">
+                                        Добавить в избранное
+                                    </button>
+                                </form>
+
+                            @endif
                         </div>
                     </div>
                 </div>
